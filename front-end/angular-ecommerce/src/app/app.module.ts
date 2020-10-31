@@ -4,9 +4,38 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import{HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { ProductService } from './services/product.service';
+import { Routes, RouterModule, Router } from '@angular/router';
 
+
+
+const routes: Routes = [
+  {
+    path: ' category/id:',
+    component: ProductListComponent
+  },
+  {
+    path: ' category :',
+    component: ProductListComponent
+  },
+  {
+    path: ' products/id:',
+    component: ProductListComponent
+  },
+  {
+    path: '  ',
+    redirectTo: '/products',
+    pathMatch: 'full'
+
+  },
+  {
+    path: ' ** ',
+    redirectTo: '/products',
+    pathMatch: 'full'
+
+  }
+]
 
 @NgModule({
   declarations: [
@@ -14,10 +43,11 @@ import { ProductService } from './services/product.service';
     ProductListComponent
   ],
   imports: [
-    BrowserModule, 
+    RouterModule.forRoot(routes),
+    BrowserModule,
     HttpClientModule,
     AppRoutingModule
-    
+
   ],
   providers: [ProductService],
   bootstrap: [AppComponent]

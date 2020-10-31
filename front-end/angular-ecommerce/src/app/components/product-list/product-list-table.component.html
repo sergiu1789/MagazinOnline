@@ -5,14 +5,14 @@
             <th>Name</th>
             <th>Price</th>
             <th>Units in Stock </th>
-            
+
         </tr>
 
     </thead>
     <tbody>
         <tr *ngFor="let tempProduct of products">
             <td class="align-middle">
-                <img src="{{tempProduct.imageUrl}} " height="50"/>
+                <img src="{{tempProduct.imageUrl}} " height="10" />
 
             </td>
             <td class="align-middle">{{tempProduct.name}}</td>
@@ -24,6 +24,3 @@
 
 
 </table>
-
-
- 
