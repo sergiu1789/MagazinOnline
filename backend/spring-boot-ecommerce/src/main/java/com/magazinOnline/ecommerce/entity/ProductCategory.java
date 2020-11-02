@@ -1,4 +1,4 @@
-package com.luv2code.ecommerce.entity;
+package com.magazinOnline.ecommerce.entity;
 
 import lombok.Getter;
 import lombok.Setter;
