@@ -2,24 +2,27 @@
     <div class="section-content section-content-p30">
         <div class="container-fluid">
 
-            <div *ngIf="cartItems.length>0">
+            <div *ngIf="cartItems.length > 0">
+
                 <table class="table table-bordered">
                     <tr>
-                        <th width="20%">Product Image</th>
-                        <th width="50%">Product Detail</th>
+                        <th width="20%">Imagine Produs</th>
+                        <th width="50%">Detalii Produs</th>
                         <th width="30%"></th>
                     </tr>
+
                     <tr *ngFor="let tempCartItem of cartItems">
                         <td>
-                            <img src="{{tempCartItem.imageUrl}}" class="img-responsive" width="150px" />
+                            <img src="{{ tempCartItem.imageUrl }}" class="img-responsive" width="150px" />
                         </td>
                         <td>
-                            <p>{{tempCartItem.name}}</p>
-                            <p>{{tempCartItem.unitPrice | currency:'EUR'}}</p>
+                            <p>{{ tempCartItem.name }}</p>
+                            <p>{{ tempCartItem.unitPrice | currency: 'RON' }}</p>
                         </td>
                         <td>
                             <div class="items">
                                 <label>Cantitate:</label>
+
                                 <div class="row no-gutters">
                                     <div class="col">
                                         <button (click)="incrementQuantity(tempCartItem)"
@@ -27,47 +30,47 @@
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
-                                    <div class="col ml-4 mr-2">
-                                        {{tempCartItem.quantity}}
-                                    </div>
-                                </div>
 
-                                <div class="row no-gutters">
+                                    <div class="col ml-4 mr-2">
+                                        {{ tempCartItem.quantity }}
+                                    </div>
+
                                     <div class="col">
                                         <button (click)="decrementQuantity(tempCartItem)"
-                                            class=" btn btn-primary btn-sm ">
-                                            <i class=" fas fa-minus"></i>
+                                            class="btn btn-primary btn-sm">
+                                            <i class="fas fa-minus"></i>
                                         </button>
                                     </div>
-                                    <div class="col ml-4 mr-2">
-                                        {{tempCartItem.quantity}}
-                                    </div>
+
+                                    <div class="col-8"></div>
                                 </div>
 
-
                             </div>
-                            <button (click)="remove(tempCartItem)" class="btn btn-primary btn -sm mt-2">Remove</button>
-                            <p class="mt-2">Subtotal: {{tempCartItem.quantity*tempCartItem.unitPrice | currency: 'EUR'}}
-                            </p>
+
+                            <button (click)="remove(tempCartItem)" class="btn btn-primary btn-sm mt-2">Sterge </button>
+
+                            <p class="mt-2">Total : {{ tempCartItem.quantity * tempCartItem.unitPrice | currency: 'RON'
+                                }}</p>
                         </td>
                     </tr>
 
                     <tr>
                         <td colspan="2"></td>
-                        <td style="font-weight:bold">
-                            <p>Cantitate: {{totalQuantity}}</p>
-                            <p>Pret Transport: Gratuit </p>
-                            <p>Total Plata
-                                {{totalPrice | currency : 'EUR' }}
-                            </p>
-                            <a routerLink="/checkout" class="btn btn-primary">Continua</a>
+                        <td style="font-weight: bold">
+                            <p>Cantitate : {{ totalQuantity }}</p>
+                            <p>Livrare: Gratuita</p>
+                            <p>Pret Total: {{ totalPrice | currency: 'RON' }}</p>
+                            <a routerLink="/checkout" class="btn btn-primary">Plateste</a>
                         </td>
                     </tr>
+
                 </table>
+
             </div>
+
             <!-- if cart is empty then display a message -->
             <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-12" role="alert">
-                Cosul dumneavoastra este gol.
+                Cosul este gol.
             </div>
 
         </div>

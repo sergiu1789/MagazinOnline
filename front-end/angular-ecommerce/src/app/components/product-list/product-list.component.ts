@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/services/product.service';
 import { Product } from 'src/app/common/product';
 import { ActivatedRoute } from '@angular/router';
+import { timeoutWith } from 'rxjs/operators';
 import { CartItem } from 'src/app/common/cart-item';
 import { CartService } from 'src/app/services/cart.service';
 
@@ -19,12 +20,14 @@ export class ProductListComponent implements OnInit {
 
   // new properties for pagination
   thePageNumber: number = 1;
-  thePageSize: number = 10;
+  thePageSize: number = 5;
   theTotalElements: number = 0;
+
   previousKeyword: string = null;
 
-  constructor(private productService: ProductService, private cartService: CartService,
-    private route: ActivatedRoute) { }
+  constructor(private productService: ProductService,
+              private cartService: CartService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(() => {
@@ -49,19 +52,22 @@ export class ProductListComponent implements OnInit {
 
     const theKeyword: string = this.route.snapshot.paramMap.get('keyword');
 
+    // if we have a different keyword than previous
+    // then set thePageNumber to 1
+
     if (this.previousKeyword != theKeyword) {
       this.thePageNumber = 1;
     }
+
     this.previousKeyword = theKeyword;
-    console.log(`keyword=${theKeyword},thePageNumber=${this.thePageNumber}`)
-    this.productService.searchProductsPaginate(this.thePageNumber - 1, this.thePageSize, theKeyword).subscribe(this.processResult());
+
+    console.log(`keyword=${theKeyword}, thePageNumber=${this.thePageNumber}`);
 
     // now search for the products using keyword
-    this.productService.searchProducts(theKeyword).subscribe(
-      data => {
-        this.products = data;
-      }
-    )
+    this.productService.searchProductsPaginate(this.thePageNumber - 1,
+                                               this.thePageSize,
+                                               theKeyword).subscribe(this.processResult());
+                                               
   }
 
   handleListProducts() {
@@ -95,9 +101,9 @@ export class ProductListComponent implements OnInit {
 
     // now get the products for the given category id
     this.productService.getProductListPaginate(this.thePageNumber - 1,
-      this.thePageSize,
-      this.currentCategoryId)
-      .subscribe(this.processResult());
+                                               this.thePageSize,
+                                               this.currentCategoryId)
+                                               .subscribe(this.processResult());
   }
 
   processResult() {
@@ -114,11 +120,15 @@ export class ProductListComponent implements OnInit {
     this.thePageNumber = 1;
     this.listProducts();
   }
-  addToCart(theProduct: Product) {
-    console.log(`Adding to cart : ${theProduct.name},${theProduct.unitPrice}`);
 
-    //TODO ...DO REAL WORK
+  addToCart(theProduct: Product) {
+    
+    console.log(`Adding to cart: ${theProduct.name}, ${theProduct.unitPrice}`);
+
+    // TODO ... do the real work
     const theCartItem = new CartItem(theProduct);
+
     this.cartService.addToCart(theCartItem);
   }
+
 }

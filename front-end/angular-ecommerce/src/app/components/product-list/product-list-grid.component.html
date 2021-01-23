@@ -16,15 +16,15 @@
                             <h1>{{ tempProduct.name }}</h1>
                         </a>
 
-                        <div class="price">{{ tempProduct.unitPrice | currency:'EUR' }}</div>
-                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Add to cart</button>
+                        <div class="price">{{ tempProduct.unitPrice | currency:'RON' }}</div>
+                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Adauga In Cos</button>
                     </div>
 
                 </div>
 
                 <!-- if products empty then display a message-->
                 <div *ngIf="products?.length == 0" class="alert alert-warning col-md-12" role="alert">
-                    No products found.
+                    Nu sau gasit produse.
                 </div>
 
             </div>
@@ -47,12 +47,12 @@
                             </div>
 
                             <div class="col-md-3 mt-2" style="text-align: right;">
-                                <span class="mr-2">Page Size</span>
+                                <span class="mr-2">Dimensiune Pagina </span>
 
                                 <select (change)="updatePageSize($event.target.value)">
                                     <option>2</option>
-                                    <option selected="true">5</option>
-                                    <option>10</option>
+                                    <option>5</option>
+                                    <option selected="true">10</option>
                                     <option>20</option>
                                     <option>50</option>
                                 </select>

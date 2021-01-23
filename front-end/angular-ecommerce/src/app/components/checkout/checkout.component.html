@@ -4,15 +4,25 @@
 
             <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
 
-                <!-- detalii  client  -->
+                <!-- customer form group -->
                 <div formGroupName="customer" class="form-area">
-                    <h3>Client</h3>
+                    <h3>Informatii Client</h3>
 
                     <div class="row">
                         <div class="col-md-2"> <label>Nume</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="firstName" type="text">
+                                <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+                                    class="alert alert-danger mt-1">
+                                    <div *ngIf="firstName.errors.required || firstName.errors.notOnlyWhiteSpace">
+                                        Nume este necesar !
+                                    </div>
+                                    <div *ngIf="firstName.errors.minlength || firstName.errors.notOnlyWhiteSpace ">
+                                        Numele trebuie sa aiba macar 2 caractere!
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -22,6 +32,16 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="lastName" type="text">
+                                <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+                                    class="alert alert-danger mt-1">
+                                    <div *ngIf="lastName.errors.required || lastName.errors.notOnlyWhiteSpace">
+                                        Prenume este necesar !
+                                    </div>
+                                    <div *ngIf="lastName.errors.minlength || lastName.errors.notOnlyWhiteSpace">
+                                        Prenume trebuie sa aiba macar 2 caractere!
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -31,37 +51,40 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="email" type="text">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2"> <label>Numar De Telefon </label></div>
-                        <div class="col-md-9">
-                            <div class="input-space">
-                                <input formControlName="phoneNumber" type="text">
+                                <div *ngIf="email.invalid && (email.dirty || email.touched)"
+                                    class="alert alert-danger mt-1">
+                                    <div *ngIf="email.errors.required">
+                                        Email este necesar !
+                                    </div>
+                                    <div *ngIf="email.errors.pattern">
+                                        Email trebuie sa fie valid
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- adresa de livrare -->
+                <!-- shipping Address -->
                 <div formGroupName="shippingAddress" class="form-area">
-                    <h3>Shipping Address</h3>
+                    <h3>Adresa de Livrare</h3>
 
                     <div class="row">
                         <div class="col-md-2"> <label>Tara</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
-                                <select formControlName="country">
-                                    <option>TO DO</option>
+                                <select formControlName="country" (change)="getStates('shippingAddress')">
+                                    <option *ngFor="let country of countries" [ngValue]="country">
+                                        {{ country.name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Strada</label></div>
+                        <div class="col-md-2"> <label>Nume Strada</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="street" type="text">
@@ -83,7 +106,9 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="state">
-                                    <option>TO DO</option>
+                                    <option *ngFor="let state of shippingAddressStates" [ngValue]="state">
+                                        {{ state.name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -100,32 +125,34 @@
 
                 </div>
 
-                <!-- check box ptr duplicare adresa pe factura  -->
+                <!-- Add check box to copy shipping to billing -->
                 <div class="input-space">
                     <label class="au-checkbox">
                         <input type="checkbox" (change)="copyShippingAddressToBillingAddress($event)">
-                        <span class="au-checkmark"></span>Adresa de livrare identica cu cea de facturare
+                        <span class="au-checkmark"></span>Adresa facturare aceasi ca si cea de livrare
                     </label>
                 </div>
 
 
-                <!-- Adresa Facturare -->
+                <!-- Billing Address -->
                 <div formGroupName="billingAddress" class="form-area">
-                    <h3>Billing Address</h3>
+                    <h3>Adresa de Facturare</h3>
 
                     <div class="row">
                         <div class="col-md-2"> <label>Tara</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
-                                <select formControlName="country">
-                                    <option>TO DO</option>
+                                <select formControlName="country" (change)="getStates('billingAddress')">
+                                    <option *ngFor="let country of countries" [ngValue]="country">
+                                        {{ country.name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Strada</label></div>
+                        <div class="col-md-2"> <label>Adresa de facturare</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="street" type="text">
@@ -147,7 +174,9 @@
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="state">
-                                    <option>TO DO</option>
+                                    <option *ngFor="let state of billingAddressStates" [ngValue]="state">
+                                        {{ state.name }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -164,9 +193,9 @@
 
                 </div>
 
-                <!-- Card Credit -->
+                <!-- Credit Card -->
                 <div formGroupName="creditCard" class="form-area">
-                    <h3>Credit Card</h3>
+                    <h3>Card</h3>
 
                     <div class="row">
                         <div class="col-md-2"> <label>Tip de Card</label></div>
@@ -181,7 +210,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Nume Titular Card</label></div>
+                        <div class="col-md-2"> <label>Numele Titularului </label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="nameOnCard" type="text">
@@ -190,7 +219,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Numar Card</label></div>
+                        <div class="col-md-2"> <label>Numarul Cardului</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="cardNumber" type="text">
@@ -199,7 +228,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Cod De Securitate</label></div>
+                        <div class="col-md-2"> <label>Cod Securitate</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <input formControlName="securityCode" type="text">
@@ -208,7 +237,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Expira in luna</label></div>
+                        <div class="col-md-2"> <label>Luna Expirare Card</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="expirationMonth">
@@ -221,7 +250,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-2"> <label>Expira in anul </label></div>
+                        <div class="col-md-2"> <label>An Expirare Card</label></div>
                         <div class="col-md-9">
                             <div class="input-space">
                                 <select formControlName="expirationYear" (change)="handleMonthsAndYears()">
@@ -234,18 +263,19 @@
                     </div>
 
                 </div>
-                <!-- Detalii Comanda  -->
-                <div class="form-area">
-                    <h3>Review Your Order</h3>
 
-                    <p>Cantitate : {{ totalQuantity }}</p>
-                    <p>Transport: Gratuit</p>
-                    <p>Pret Total: {{ totalPrice | currency: 'EUR' }}</p>
+                <!-- Order details -->
+                <div class="form-area">
+                    <h3>Verifica Comanda </h3>
+
+                    <p>Cantitate: {{ totalQuantity }}</p>
+                    <p>Livrare: Gratuita</p>
+                    <p>Pret Total: {{ totalPrice | currency: 'USD' }}</p>
                 </div>
 
                 <!-- submit button-->
                 <div class="text-center">
-                    <button type="submit" class="btn btn-info">Comanda!</button>
+                    <button type="submit" class="btn btn-info">Plateste</button>
                 </div>
 
             </form>
