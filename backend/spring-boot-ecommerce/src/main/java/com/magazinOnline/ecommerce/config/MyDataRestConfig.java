@@ -1,7 +1,9 @@
 package com.magazinOnline.ecommerce.config;
 
+import com.magazinOnline.ecommerce.entity.Country;
 import com.magazinOnline.ecommerce.entity.Product;
 import com.magazinOnline.ecommerce.entity.ProductCategory;
+import com.magazinOnline.ecommerce.entity.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -17,7 +19,7 @@ import java.util.Set;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
     public MyDataRestConfig(EntityManager theEntityManager) {
@@ -31,19 +33,24 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
 
         // disable HTTP methods for Product: PUT, POST and DELETE
-        config.getExposureConfiguration()
-                .forDomainType(Product.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+          disableHttp(Product.class,config, theUnsupportedActions);
 
         // disable HTTP methods for ProductCategory: PUT, POST and DELETE
-        config.getExposureConfiguration()
-                .forDomainType(ProductCategory.class)
-                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+        disableHttp(ProductCategory.class,config, theUnsupportedActions);
+// disable HTTP methods for Country : PUT, POST and DELETE
+        disableHttp(Country.class,config, theUnsupportedActions);
+// disable HTTP methods for State : PUT, POST and DELETE
+        disableHttp(State.class,config, theUnsupportedActions);
 
         // call an internal helper method
         exposeIds(config);
+    }
+
+    private void disableHttp(Class theClass,RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
+        config.getExposureConfiguration()
+                .forDomainType(theClass)
+                .withItemExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
+                .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {

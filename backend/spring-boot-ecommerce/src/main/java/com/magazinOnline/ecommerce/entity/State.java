@@ -16,6 +16,7 @@ public class State {
 @Column(name="name")
     private String name;
 @ManyToOne
+//@JsonIgnore
 @JoinColumn(name="country_id")
     private Country country;
 }
